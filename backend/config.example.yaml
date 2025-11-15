@@ -1,0 +1,79 @@
+cluster:
+  name: "KVM Cluster"
+  description: "Production KVM/QEMU cluster with OVN networking"
+
+# KVM hosts in the cluster
+hosts:
+  - name: "kvm-host-1"
+    address: "192.168.1.101"
+    libvirt_uri: "qemu+ssh://root@192.168.1.101/system"
+    enabled: true
+
+  - name: "kvm-host-2"
+    address: "192.168.1.102"
+    libvirt_uri: "qemu+ssh://root@192.168.1.102/system"
+    enabled: true
+
+# OVN configuration
+ovn:
+  nb_db: "tcp:192.168.1.101:6641"  # OVN Northbound database
+  sb_db: "tcp:192.168.1.101:6642"  # OVN Southbound database
+  # For SSL:
+  # nb_db: "ssl:192.168.1.101:6641"
+  # ssl_cert: "/etc/ovn/cert.pem"
+  # ssl_key: "/etc/ovn/key.pem"
+  # ssl_ca: "/etc/ovn/ca.pem"
+
+# OVS configuration
+ovs:
+  integration_bridge: "br-int"
+  external_bridge: "br-ex"
+
+# Database configuration
+database:
+  url: "sqlite+aiosqlite:///./cluster.db"
+  # For PostgreSQL:
+  # url: "postgresql+asyncpg://user:password@localhost/cluster_db"
+  echo: false
+  pool_size: 5
+  max_overflow: 10
+
+# Storage configuration
+storage:
+  default_pool: "default"
+  image_path: "/var/lib/libvirt/images"
+  iso_path: "/var/lib/libvirt/isos"
+
+# Network configuration
+network:
+  management_network: "192.168.100.0/24"
+  default_gateway: "192.168.100.1"
+  dns_servers:
+    - "8.8.8.8"
+    - "8.8.4.4"
+
+# API configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false
+  workers: 4
+  log_level: "info"
+
+# Security
+security:
+  secret_key: "change-this-to-a-random-secret-key"
+  algorithm: "HS256"
+  access_token_expire_minutes: 30
+  enable_auth: false  # Set to true in production
+
+# CORS
+cors:
+  allow_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+  allow_credentials: true
+  allow_methods:
+    - "*"
+  allow_headers:
+    - "*"
