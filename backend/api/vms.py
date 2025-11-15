@@ -4,8 +4,7 @@ Virtual Machine management API endpoints
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
-from services.libvirt_manager import LibvirtManager
-from services.cluster_manager import ClusterManager
+from services import LibvirtManager, ClusterManager
 from config import settings
 
 router = APIRouter()

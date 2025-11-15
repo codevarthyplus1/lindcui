@@ -2,11 +2,26 @@
 Cluster management service - orchestrates multiple hosts
 """
 import logging
+import os
 from typing import List, Dict, Any, Optional
-from services.libvirt_manager import LibvirtManager
-from services.ovn_manager import OVNManager
-from services.ovs_manager import OVSManager
 from config import settings
+
+# Use mock services if libvirt is not available
+USE_MOCK = os.getenv("TEST_MODE", "0") == "1"
+
+if USE_MOCK:
+    from services.mock_libvirt_manager import LibvirtManager
+    from services.mock_ovn_manager import OVNManager
+    from services.mock_ovs_manager import OVSManager
+else:
+    try:
+        from services.libvirt_manager import LibvirtManager
+        from services.ovn_manager import OVNManager
+        from services.ovs_manager import OVSManager
+    except ImportError:
+        from services.mock_libvirt_manager import LibvirtManager
+        from services.mock_ovn_manager import OVNManager
+        from services.mock_ovs_manager import OVSManager
 
 logger = logging.getLogger(__name__)
 

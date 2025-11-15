@@ -4,7 +4,7 @@ Host management API endpoints
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any
-from services.libvirt_manager import LibvirtManager
+from services import LibvirtManager
 from config import settings
 
 router = APIRouter()

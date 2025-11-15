@@ -6,11 +6,19 @@ from sqlalchemy.orm import DeclarativeBase
 from config import settings
 
 # Create async engine
+# SQLite doesn't support pool_size and max_overflow
+engine_kwargs = {
+    "echo": settings.database.echo,
+}
+
+# Only add pool settings for non-SQLite databases
+if not settings.database.url.startswith("sqlite"):
+    engine_kwargs["pool_size"] = settings.database.pool_size
+    engine_kwargs["max_overflow"] = settings.database.max_overflow
+
 engine = create_async_engine(
     settings.database.url,
-    echo=settings.database.echo,
-    pool_size=settings.database.pool_size,
-    max_overflow=settings.database.max_overflow,
+    **engine_kwargs
 )
 
 # Create async session maker

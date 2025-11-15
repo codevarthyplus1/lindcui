@@ -321,6 +321,55 @@ lindcui/
 - [ ] Storage cluster integration (Ceph)
 - [ ] Advanced networking (VPNs, VLANs)
 
+## Testing
+
+### Quick Test Setup (No KVM Required)
+
+For testing and development without actual KVM hosts:
+
+```bash
+# One-command setup
+./install-and-test.sh
+
+# Start all services
+./start-servers.sh
+
+# Test the installation
+./test-installation.sh
+
+# Access the system
+# Web GUI: http://localhost:5173
+# API Docs: http://localhost:8000/docs
+
+# Stop services
+./stop-servers.sh
+```
+
+This sets up a complete test environment with:
+- 3 simulated KVM servers
+- Backend API with mock services
+- Frontend web GUI
+- Full API functionality
+
+See [TEST-RESULTS.md](TEST-RESULTS.md) for detailed test results.
+
+### Testing with Real KVM Hosts
+
+For testing with actual KVM servers, install the full dependencies:
+
+```bash
+# On each KVM host
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients \
+                 openvswitch-switch ovn-host ovn-central
+
+# On management server
+cd backend
+pip install -r requirements.txt  # Includes libvirt-python
+
+# Configure config.yaml with real host addresses
+# Then start services normally
+```
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit pull requests.

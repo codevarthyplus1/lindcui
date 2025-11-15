@@ -4,8 +4,7 @@ Network management API endpoints (OVN/OVS)
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
-from services.ovn_manager import OVNManager
-from services.ovs_manager import OVSManager
+from services import OVNManager, OVSManager
 from config import settings
 
 router = APIRouter()
